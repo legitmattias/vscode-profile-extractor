@@ -15,8 +15,6 @@ A Bash script for extracting and listing installed extensions from `.code-profil
 ./parse-profile.sh <profile-file> [--verbose] [--debug]
 ```
 
-
-
 > **_NOTE:_** Before running the script, ensure it has execution permissions: `chmod +x parse-profile.sh`
 
 ### Arguments
@@ -57,7 +55,7 @@ GitHub Copilot
 GitHub Copilot Chat
 REST Client
 Monokai Pro
-No Display Name
+No Display Name found. Identificational name: moozzyk.arduino
 Docker
 Python Debugger
 Python
