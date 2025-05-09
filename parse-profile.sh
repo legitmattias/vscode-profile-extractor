@@ -55,7 +55,13 @@ if [ "$VERBOSE_MODE" = true ]; then
   echo "$UNESCAPED_EXTENSIONS" | jq -r 'map("ID: \(.identifier.id), Name: \(.displayName // "No Display Name"), UUID: \(.identifier.uuid)") | .[]'
 else
   # Default output: Show only the display name of each extension
-  echo "$UNESCAPED_EXTENSIONS" | jq -r 'map(.displayName // "No Display Name") | .[]'
+  echo "$UNESCAPED_EXTENSIONS" | jq -r '
+    map(
+      if .displayName
+      then .displayName
+      else "No Display Name found. Identificational name: \(.identifier.id)"
+      end
+    ) | .[]'
 fi
 
 # Show debug info if --debug flag is set
