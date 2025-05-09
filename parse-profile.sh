@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Path to the .code-profile file
 PROFILE_FILE="$1"  # Pass the file as an argument
