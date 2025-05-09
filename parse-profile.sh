@@ -2,11 +2,23 @@
 
 # Path to the .code-profile file
 PROFILE_FILE="$1"  # Pass the file as an argument
+DEBUG_MODE=false    # Default to not showing debug info
+
+# Function to display usage/help
+usage() {
+  echo "Usage: $0 <profile-file> [--debug]"
+  echo "  --debug    Show full debug information (unescaped JSON and more details)"
+}
 
 # Check if the file exists
 if [ ! -f "$PROFILE_FILE" ]; then
   echo "File not found: $PROFILE_FILE"
   exit 1
+fi
+
+# Check for --debug flag
+if [[ "$2" == "--debug" ]]; then
+  DEBUG_MODE=true
 fi
 
 # Extract and display basic profile metadata (name, icon)
@@ -26,10 +38,12 @@ UNESCAPED_EXTENSIONS=$(echo "$EXTENSIONS_JSON" | sed 's/\\"/"/g')
 
 # Parse the unescaped extensions JSON
 echo "Installed Extensions:"
-echo "$UNESCAPED_EXTENSIONS" | jq -r 'map("ID: \(.identifier.id), Name: \(.displayName), UUID: \(.identifier.uuid)") | .[]'
+echo "$UNESCAPED_EXTENSIONS" | jq -r 'map("ID: \(.identifier.id), Name: \(.displayName // "No Display Name"), UUID: \(.identifier.uuid)") | .[]'
 
-# Show debugging data
-echo ""
-echo "Full Metadata Extract (for debugging):"
-jq . "$PROFILE_FILE"
+# Show debug info if --debug flag is set
+if [ "$DEBUG_MODE" = true ]; then
+  echo ""
+  echo "Full Metadata Extract (for debugging):"
+  jq . "$PROFILE_FILE"
+fi
 
