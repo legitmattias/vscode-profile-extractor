@@ -18,15 +18,20 @@ if [ ! -f "$PROFILE_FILE" ]; then
   exit 1
 fi
 
-# Check for --verbose and --debug flags
-if [[ "$2" == "--verbose" ]]; then
-  VERBOSE_MODE=true
-elif [[ "$2" == "--debug" ]]; then
-  DEBUG_MODE=true
-elif [[ "$2" == "--verbose" && "$3" == "--debug" ]]; then
-  VERBOSE_MODE=true
-  DEBUG_MODE=true
-fi
+# Check for --verbose and --debug flags and set the appropriate modes
+for arg in "$@"; do
+  case "$arg" in
+    --verbose)
+      VERBOSE_MODE=true
+      ;;
+    --debug)
+      DEBUG_MODE=true
+      ;;
+    *)
+      # Ignore other arguments
+      ;;
+  esac
+done
 
 # Extract and display basic profile metadata (name, icon)
 echo "Profile Metadata:"
