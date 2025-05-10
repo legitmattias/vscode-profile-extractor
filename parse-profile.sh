@@ -17,7 +17,7 @@ detailed metadata or debug information.
 HELP INFO
 =========
 Usage: $0 <profile-file> [--verbose] [--debug] [--help]
-  --verbose  Show extended extension details (ID, UUID)
+  --verbose  Show extended extension details (ID text descriptor, UUID)
   --debug    Show full debug information (unescaped JSON and more details)
   --help     Show this help message
 EOF
@@ -80,8 +80,8 @@ UNESCAPED_EXTENSIONS=$(echo "$EXTENSIONS_JSON" | sed 's/\\"/"/g')
 # Show installed extensions (default behavior shows only the names)
 echo "Installed Extensions:"
 if [ "$VERBOSE_MODE" = true ]; then
-  # Verbose output: Show ID, Name, and UUID for each extension
-  echo "$UNESCAPED_EXTENSIONS" | jq -r 'map("ID: \(.identifier.id), Name: \(.displayName // "No Display Name"), UUID: \(.identifier.uuid)") | .[]'
+  # Verbose output: Show Name, ID, and UUID for each extension
+  echo "$UNESCAPED_EXTENSIONS" | jq -r 'map("Name: \(.displayName // "No Display Name"), ID: \(.identifier.id), UUID: \(.identifier.uuid)") | .[]'
 else
   # Default output: Show only the display name of each extension
   echo "$UNESCAPED_EXTENSIONS" | jq -r '
