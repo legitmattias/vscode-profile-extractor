@@ -64,6 +64,8 @@ fi
 
 # Extract and display basic profile metadata (name, icon)
 echo "Profile Metadata:"
+echo "-----------------"
+
 PROFILE_NAME=$(jq -r '.name' "$PROFILE_FILE")
 PROFILE_ICON=$(jq -r '.icon' "$PROFILE_FILE")
 
@@ -79,6 +81,7 @@ UNESCAPED_EXTENSIONS=$(echo "$EXTENSIONS_JSON" | sed 's/\\"/"/g')
 
 # Show installed extensions (default behavior shows only the names)
 echo "Installed Extensions:"
+echo "---------------------"
 if [ "$VERBOSE_MODE" = true ]; then
   # Verbose output: Show Name, ID, and UUID for each extension
   echo "$UNESCAPED_EXTENSIONS" | jq -r '
