@@ -1,24 +1,36 @@
 #!/usr/bin/env bash
 
-# Path to the .code-profile file
-PROFILE_FILE="$1"  # Pass the file as an argument
 DEBUG_MODE=false    # Default to not showing debug info
 VERBOSE_MODE=false  # Default to not showing verbose output
 
 # Function to display usage/help
 usage() {
-  echo "Usage: $0 <profile-file> [--verbose] [--debug]"
-  echo "  --verbose  Show extended extension details (ID, UUID)"
-  echo "  --debug    Show full debug information (unescaped JSON and more details)"
+  cat <<EOF
+===================================
+VS Code Profile Extension Extractor
+===================================
+This script parses a .code-profile file exported from Visual Studio Code
+and lists the installed extensions. You can optionally display more
+detailed metadata or debug information.
+
+=========
+HELP INFO
+=========
+Usage: $0 <profile-file> [--verbose] [--debug] [--help]
+  --verbose  Show extended extension details (ID, UUID)
+  --debug    Show full debug information (unescaped JSON and more details)
+  --help     Show this help message
+EOF
 }
 
-# Check if the file exists
-if [ ! -f "$PROFILE_FILE" ]; then
-  echo "File not found: $PROFILE_FILE"
+# Ensure at least one argument is provided
+if [ $# -eq 0 ]; then
+  usage
   exit 1
 fi
 
-# Check for --verbose and --debug flags and set the appropriate modes
+# Parse arguments and flags
+PROFILE_FILE=""
 for arg in "$@"; do
   case "$arg" in
     --verbose)
@@ -27,11 +39,28 @@ for arg in "$@"; do
     --debug)
       DEBUG_MODE=true
       ;;
+    --help)
+      usage
+      exit 0
+      ;;
+    --*)
+      echo "Unknown option: $arg"
+      usage
+      exit 1
+      ;;
     *)
-      # Ignore other arguments
+      if [ -z "$PROFILE_FILE" ]; then
+        PROFILE_FILE="$arg"
+      fi
       ;;
   esac
 done
+
+# Check if the file exists
+if [ ! -f "$PROFILE_FILE" ]; then
+  echo "File not found: $PROFILE_FILE"
+  exit 1
+fi
 
 # Extract and display basic profile metadata (name, icon)
 echo "Profile Metadata:"
