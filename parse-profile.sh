@@ -81,7 +81,8 @@ UNESCAPED_EXTENSIONS=$(echo "$EXTENSIONS_JSON" | sed 's/\\"/"/g')
 echo "Installed Extensions:"
 if [ "$VERBOSE_MODE" = true ]; then
   # Verbose output: Show Name, ID, and UUID for each extension
-  echo "$UNESCAPED_EXTENSIONS" | jq -r 'map("Name: \(.displayName // "No Display Name"), ID: \(.identifier.id), UUID: \(.identifier.uuid)") | .[]'
+  echo "$UNESCAPED_EXTENSIONS" | jq -r '
+  map("Name: \(.displayName // "No Display Name")\n├─ ID: \(.identifier.id)\n└─ UUID: \(.identifier.uuid)") | .[]'
 else
   # Default output: Show only the display name of each extension
   echo "$UNESCAPED_EXTENSIONS" | jq -r '
